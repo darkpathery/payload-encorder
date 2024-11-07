@@ -1,44 +1,9 @@
 import argparse
 import base64
+import urllib.parse
+import binascii
+import quopri
 from cryptography.fernet import Fernet
-
-# Add your ASCII art here
-ASCII_ART = "\033[1;31m" + r"""
-
-                                            66 73 71  68
-
-
-
-                                        :^^:            :^^:
-                                      !B&##&G!       .?B&##&P:
-                                      B@GB&?#@J7JYYJ!5@GJ&GB@Y
-                                      !GBBY P@@B5YYP#@@?:PBBP^
-                                        .  ~&&7     .Y@#.
-                                           G@Y        B@J
-                              .::^^^:.     B@?        P@5     .:^^^:..
-                         .~JPB########B57: P@Y        B@? ^?PB#######BG5?^
-                       ^Y#&GY7~:....:~?P&&55@B       :&@YG@#57^:...:^~75B&B?:
-                     .Y@&J:             .7#@@&^      7@@@G!.             ^Y@&7
-                     5@G.                 .J@@?      P@#7                  ^#@?
-                    ~@&:        .^!7??!~:.  !P7      J5^  .^~7??7~:         !@&.
-                    !@&:      !P#&BGPPGB##P7.          :JG##BGPPG#&BY^      !@&:
-                     Y@#J~^~?B@G7..^~~^:^!5&&J       :5&#J~^:^~~:.:?#@G7^^!Y&&7
-                      ^YGB#BBY~  7#&BB##BGPG@@P^:.:^~B@&PPGB##BB&G~  !5B##BG?:
-                          ..    ^@@!  .:~7YG#@@@@&&@@@@#PJ7~:.  J@#.    ..
-                                .P@BY5PGBBBG#@@G7!!?#@@BGBBBGPY5#@J
-                                  ~JYJ7!~::Y&&5:    ~P&#?:^~7?YY?^
-                                     ^!. :B@5:        ^B@5  ^!:
-                                   !B@B~ B@Y           .G@Y ?#@P^
-                                  7@&!  !@#.            ~@&:  ?@&^
-                                  B@?   ?@G             :&@~   P@5
-                                 .#@7   !@#:            ~@&:   5@P
-                                  Y@P    G@Y            G@Y   :#@7
-                                  .B@Y   ^&@?          5@G.  .G@5
-                                   .B@B~  ^B@5:      ^G@P.  7#@5
-                                  ~5&#5:   .Y&&Y^ .~P@#7    ~P&#J:
-                                .G@B?.       :JB&B#&G7.       :J#@Y
-                                 !~             ^!!:            .!~
-""" + "\033[0m"
 
 # ANSI escape codes for text color
 RED_COLOR = "\033[1;31m"
@@ -56,31 +21,110 @@ def encrypt_payload(payload, key):
     encrypted_payload = cipher.encrypt(payload.encode())
     return encrypted_payload
 
-# Custom encoding function with encryption
-def custom_encode(payload):
+# Base64 encoding
+def base64_encode(payload):
+    encoded_payload = base64.b64encode(payload.encode()).decode('utf-8')
+    return encoded_payload
+
+# Hexadecimal encoding
+def hex_encode(payload):
+    encoded_payload = payload.encode().hex()
+    return encoded_payload
+
+# URL encoding
+def url_encode(payload):
+    encoded_payload = urllib.parse.quote(payload)
+    return encoded_payload
+
+# ASCII85 encoding
+def ascii85_encode(payload):
+    encoded_payload = base64.a85encode(payload.encode()).decode('utf-8')
+    return encoded_payload
+
+# Rot13 encoding
+def rot13_encode(payload):
+    encoded_payload = payload.encode('rot_13')  # Rot13 is normally used on text strings directly
+    return encoded_payload
+
+# Binary encoding
+def binary_encode(payload):
+    encoded_payload = ''.join(format(ord(char), '08b') for char in payload)
+    return encoded_payload
+
+# UUEncoding
+def uuencode(payload):
+    encoded_payload = binascii.b2a_uu(payload.encode()).decode('utf-8')
+    return encoded_payload
+
+# HTML Entity encoding
+def html_entity_encode(payload):
+    encoded_payload = ''.join(f"&#{ord(char)};" for char in payload)
+    return encoded_payload
+
+# Quoted-Printable Encoding
+def quoted_printable_encode(payload):
+    encoded_payload = quopri.encodestring(payload.encode()).decode('utf-8')
+    return encoded_payload
+
+# Dictionary of encoders
+ENCODERS = {
+    "Base64": base64_encode,
+    "Hexadecimal": hex_encode,
+    "URL": url_encode,
+    "ASCII85": ascii85_encode,
+    "Rot13": rot13_encode,
+    "Binary": binary_encode,
+    "UUEncode": uuencode,
+    "HTML Entity": html_entity_encode,
+    "Quoted-Printable": quoted_printable_encode
+}
+
+# Custom encoding function with encryption and multiple encoding methods
+def custom_encode(payload, encoding_order):
     # Generate encryption key
     key = generate_key()
     # Encrypt payload
     encrypted_payload = encrypt_payload(payload, key)
-    # Convert encrypted payload to base64 for better obfuscation
-    encoded_payload = base64.b64encode(encrypted_payload).decode('utf-8')
-    return encoded_payload, key
+    
+    # Apply selected encodings in order
+    for encoding_method in encoding_order:
+        encoder_function = ENCODERS.get(encoding_method)
+        if encoder_function:
+            encrypted_payload = encoder_function(encrypted_payload.decode('utf-8') if isinstance(encrypted_payload, bytes) else encrypted_payload)
+        else:
+            print(f"Invalid encoding method: {encoding_method}")
+            return None, None
+
+    return encrypted_payload, key
+
+def get_encoding_order(num_encodings):
+    encoding_order = []
+    for i in range(num_encodings):
+        print(f"Available encoding methods: {', '.join(ENCODERS.keys())}")
+        encoding_method = input(f"Enter encoding method #{i+1}: ")
+        encoding_order.append(encoding_method)
+    return encoding_order
 
 if __name__ == "__main__":
 
-# Display ASCII art
-    print(ASCII_ART)
+    # Display ASCII art (you can add your own ASCII art here)
+    print("eNCODER")
 
-    parser = argparse.ArgumentParser(description='Encode and encrypt a payload')
-    parser.add_argument('payload', type=str, help='The payload to encode and encrypt')
-    args = parser.parse_args()
+    # Ask the user to input the payload directly
+    payload = input("Enter the payload to encode and encrypt: ")
 
-    encoded_payload, key = custom_encode(args.payload)
+    # Ask for the number of encoding steps
+    num_encodings = int(input("How many encoding steps do you want to apply? "))
 
-     # Display encoded payload in green inside brackets
-    print("\nENCODED PAYLOAD:", f"[{GREEN_COLOR}{encoded_payload}{RESET_COLOR}]")
-    
-    # Display encryption key in yellow inside brackets
-    print("ENCRYPTED KEY:", f"[{YELLOW_COLOR}{str(key)}{RESET_COLOR}]")
+    # Get the encoding order
+    encoding_order = get_encoding_order(num_encodings)
 
+    # Process the payload with selected encoding order
+    encoded_payload, key = custom_encode(payload, encoding_order)
 
+    if encoded_payload:
+        # Display the encoded payload
+        print(f"\nFINAL ENCODED PAYLOAD: {encoded_payload}")
+        
+        # Display encryption key in yellow inside brackets
+        print("ENCRYPTED KEY:", f"[{YELLOW_COLOR}{str(key)}{RESET_COLOR}]")
