@@ -28,6 +28,7 @@ Argparse: Command-line argument parsing.
 # 1. Clone the repository:
    
   git clone https://github.com/yourusername/eNCODER-BIG.git
+  
     cd eNCODER-BIG
 
 # 2. Install required dependencies:
@@ -38,7 +39,7 @@ Argparse: Command-line argument parsing.
 
  Run the program and pass a payload to encode:
 
- python encoder.py "YourPayloadHere"
+ python3 eNCODER-BIG.py "YourPayloadHere"
 
  Example output
 
