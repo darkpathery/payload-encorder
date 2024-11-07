@@ -24,25 +24,27 @@ Argparse: Command-line argument parsing.
 
 
 # Installation
-1. Clone the repository:
+
+# 1. Clone the repository:
    
-  # git clone https://github.com/yourusername/eNCODER-BIG.git
+  git clone https://github.com/yourusername/eNCODER-BIG.git
     cd eNCODER-BIG
 
-2. Install required dependencies:
+# 2. Install required dependencies:
 
-   # pip install cryptography
+    pip install cryptography
 
 # Usage
-# Run the program and pass a payload to encode:
 
-# python encoder.py "YourPayloadHere"
+ Run the program and pass a payload to encode:
+
+ python encoder.py "YourPayloadHere"
 
  Example output
 
-# ENCODED PAYLOAD: [<color-coded encoded payload>]
-# ENCRYPTED KEY: [<color-coded encryption key>]
+ENCODED PAYLOAD: [<color-coded encoded payload>]
+ENCRYPTED KEY: [<color-coded encryption key>]
 
-Future Development
-# Working on universally adaptable encoders for personalized obfuscation solutions.
+# Future Development
+ Working on universally adaptable encoders for personalized obfuscation solutions.
 
