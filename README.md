@@ -74,3 +74,18 @@ On the server side, you can split the string to retrieve the encryption key and 
 Decrypt the payload using the key, and then execute the decrypted payload as needed.
 
 
+# Future Improvements and Best Practices for Encryption and Key Management
+
+ Overview
+ 
+This project currently implements payload encryption and obfuscation using various encoding methods. However, as part of improving security and adhering to industry best practices, we plan to implement the following changes related to encryption and key management:
+
+1. Do not embed the encryption key within the payload.
+
+2. Use secure methods for storing and retrieving encryption keys (e.g., AWS KMS, Google Cloud KMS, Environment Variables).
+
+3. Consider asymmetric encryption (public/private key pairs) to avoid sharing and storing keys altogether.
+
+These changes will ensure that our encryption system aligns with the latest security standards and best practices.
+
+
