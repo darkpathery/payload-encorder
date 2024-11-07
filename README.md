@@ -1,18 +1,23 @@
-# payload-encorder
+# payload-encoder
 A customizable payload encoder for obfuscating data using various encoding methods, enhancing security for diverse payloads. Future updates will include universally adaptable encoders, offering personalized obfuscation solutions tailored to individual security needs.
 
-# eNCODER BIG
+# eNCODER 
 
-# Description
-
+Description
 A customizable payload encoder designed for obfuscating data using multiple encoding techniques. This tool enhances security by allowing flexible encoding methods for a wide range of payload types. Currently, a future update is planned to create universally adaptable encoders for individual users, offering personalized obfuscation solutions.
+
+# New Feature: Embedding Encryption Key
+
+This version of eNCODER BIG adds the functionality of embedding the encryption key directly within the encoded payload. The encrypted payload and its corresponding key are combined into a single string, ensuring that both parts are transmitted together and can be decrypted on the server-side. This improves the efficiency and ease of deploying the payload across secure systems.
 
 # Features
 
 Custom Encoding: Encodes payloads using both encryption and Base64 encoding for added obfuscation.
-Encryption Key Generation: Automatically generates a random encryption key for each payload.
+Encryption Key Generation: Automatically generates a random encryption key for each payload and embeds it within the encoded payload.
+
 Enhanced Security: Ensures the payload is encrypted before being encoded, increasing security.
 ANSI Color-Coded Output: Encoded payload and encryption key are displayed with color-coding for better readability.
+Embedding the Encryption Key: The encryption key is embedded into the payload to ensure both parts are transmitted securely together.
 
 # Technologies Used
 
@@ -20,32 +25,47 @@ Python: Main programming language.
 Cryptography: Fernet encryption (from the cryptography library).
 Base64: For encoding the encrypted payload.
 Argparse: Command-line argument parsing.
-
-
+ANSI Escape Codes: To add color coding to the output for better readability.
 
 # Installation
+Clone the repository:
 
-# 1. Clone the repository:
-   
-  git clone https://github.com/yourusername/eNCODER-BIG.git
-  
-    cd eNCODER-BIG
+git clone https://github.com/yourusername/eNCODER-BIG.git
+cd eNCODER-BIG
 
-# 2. Install required dependencies:
+# Install required dependencies:
 
-    pip install cryptography
+pip install cryptography
 
 # Usage
 
- Run the program and pass a payload to encode:
+To run the program and encode a payload:
 
- python3 eNCODER-BIG.py "YourPayloadHere"
+python3 eNCODER-BIG.py "YourPayloadHere"
 
- Example output
+# How It Works
 
-ENCODED PAYLOAD: [<color-coded encoded payload>]
-ENCRYPTED KEY: [<color-coded encryption key>]
+Input: The user inputs a payload that needs to be encrypted and obfuscated.
+Encryption: The payload is first encrypted using a randomly generated encryption key.
+Encoding: The encrypted payload is then encoded using various encoding methods (such as Base64).
+Embedding Key: The encryption key is embedded along with the encoded payload, separated by ::, allowing it to be used for decryption on the receiving end.
+Output: The final encoded payload is displayed alongside the embedded encryption key in a color-coded format for easy identification.
 
-# Future Development
- Working on universally adaptable encoders for personalized obfuscation solutions.
+
+Enter the payload to encode and encrypt: "SELECT * FROM users WHERE username='admin' AND password='password'"
+How many encoding steps do you want to apply? 2
+Available encoding methods: Base64, Hexadecimal, URL, ASCII85, Rot13, Binary, UUEncode, HTML Entity, Quoted-Printable
+Enter encoding method #1: Base64
+Enter encoding method #2: URL
+
+FINAL ENCODED PAYLOAD: dGVzdC4uJlRoZXJlLmFjdGlvbnM9MQ==
+ENCRYPTED KEY: [FMd7a6YujuOaavCnJ41-PnnxGx0k9jYvCVHwNFMdaYU=]
+
+
+# How to Deploy
+
+The encoded payload and encryption key should be sent to the target server as one single string, separated by ::.
+On the server side, you can split the string to retrieve the encryption key and the payload.
+Decrypt the payload using the key, and then execute the decrypted payload as needed.
+
 
