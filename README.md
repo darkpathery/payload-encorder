@@ -51,11 +51,16 @@ Encoding: The encrypted payload is then encoded using various encoding methods (
 Embedding Key: The encryption key is embedded along with the encoded payload, separated by ::, allowing it to be used for decryption on the receiving end.
 Output: The final encoded payload is displayed alongside the embedded encryption key in a color-coded format for easy identification.
 
+...............................................................................................................................
 
 Enter the payload to encode and encrypt: "SELECT * FROM users WHERE username='admin' AND password='password'"
+
 How many encoding steps do you want to apply? 2
+
 Available encoding methods: Base64, Hexadecimal, URL, ASCII85, Rot13, Binary, UUEncode, HTML Entity, Quoted-Printable
+
 Enter encoding method #1: Base64
+
 Enter encoding method #2: URL
 
 FINAL ENCODED PAYLOAD: dGVzdC4uJlRoZXJlLmFjdGlvbnM9MQ==
