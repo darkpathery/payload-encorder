@@ -95,8 +95,12 @@ def custom_encode(payload, encoding_order):
             print(f"Invalid encoding method: {encoding_method}")
             return None, None
 
-    return encrypted_payload, key
+    # Combine encrypted payload and key into a single string (step 2 + 3)
+    combined_payload = f"{encrypted_payload}::{key.decode('utf-8')}"
+    
+    return combined_payload
 
+# Function to retrieve the encoding order
 def get_encoding_order(num_encodings):
     encoding_order = []
     for i in range(num_encodings):
@@ -106,7 +110,6 @@ def get_encoding_order(num_encodings):
     return encoding_order
 
 if __name__ == "__main__":
-
     # Display ASCII art (you can add your own ASCII art here)
     print("eNCODER")
 
@@ -120,11 +123,8 @@ if __name__ == "__main__":
     encoding_order = get_encoding_order(num_encodings)
 
     # Process the payload with selected encoding order
-    encoded_payload, key = custom_encode(payload, encoding_order)
+    combined_payload = custom_encode(payload, encoding_order)
 
-    if encoded_payload:
-        # Display the encoded payload
-        print(f"\nFINAL ENCODED PAYLOAD: {encoded_payload}")
-        
-        # Display encryption key in yellow inside brackets
-        print("ENCRYPTED KEY:", f"[{YELLOW_COLOR}{str(key)}{RESET_COLOR}]")
+    if combined_payload:
+        # Display the encoded payload and embedded key
+        print(f"\nFINAL ENCODED PAYLOAD WITH EMBEDDED KEY: {combined_payload}")
